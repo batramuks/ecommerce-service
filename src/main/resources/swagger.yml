@@ -1,0 +1,402 @@
+openapi: 3.0.1
+info:
+  title: ecommerce  service
+  description: Contains all API paths.
+  version: 1.0.0
+servers:
+  - url: http://localhost:8081/api
+paths:
+  /products:
+    get:
+      description: Get product List
+
+      tags:
+        - "product"
+      summary: "Get product List"
+      responses:
+        200:
+          description: Pending Applications object get successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductListResponse'
+        404:
+          description: Data not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        500:
+          description: Internal Server Error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /product:
+    post:
+      tags:
+        - "product"
+      summary: "Save product object"
+      description: "create product"
+      requestBody:
+        description: "body to be saved"
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Product'
+      responses:
+        200:
+          description: "Product created Succesfully"
+        500:
+          description: "Internal Server Error"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /product/{productId}:
+    delete:
+      description: delete product based on product id
+      tags:
+        - "product"
+      summary: "delete product"
+      parameters:
+        - name: productId
+          in: path
+          required: true
+          schema:
+            type: string
+      # Expected responses for this operation:
+      responses:
+        # Response code
+        200:
+          description:  updated successfully.
+
+        400:
+          description: Invalid data supplied.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        404:
+          description: Data not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        500:
+          description: Internal Server Error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    put:
+      description: update product object
+      tags:
+        - "product"
+      summary: "update product object"
+      parameters:
+        - name: productId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Product'
+      responses:
+        200:
+          description: updated successfully
+        400:
+          description: Invalid data supplied.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        404:
+          description: Data not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        500:
+          description: Internal Server Error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /add:
+    post:
+      tags:
+        - "cart"
+      summary: "Add to  Cart "
+      description: "Add to Cart"
+      requestBody:
+        description: "body to be saved"
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CartRequest'
+      responses:
+        200:
+          description: "Cart created Succesfully"
+        500:
+          description: "Internal Server Error"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /placeorder:
+    post:
+      tags:
+        - "order"
+      summary: "Place the Order  "
+      description: "Place the order"
+      requestBody:
+        description: "body to be saved"
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Order'
+      responses:
+        200:
+          description: "Cart created Succesfully"
+        500:
+          description: "Internal Server Error"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /orders/{username}:
+    get:
+      description: Get Order List
+
+      tags:
+        - "order"
+      summary: "Get Order List"
+      parameters:
+        - name: username
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Pending Applications object get successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderListResponse'
+        404:
+          description: Data not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        500:
+          description: Internal Server Error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /orders/{orderId}:
+    get:
+      description: Get Order List
+
+      tags:
+        - "order"
+      summary: "Get Order by Id"
+      parameters:
+        - name: orderId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        200:
+          description: Pending Applications object get successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderResponse'
+        404:
+          description: Data not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        500:
+          description: Internal Server Error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /cart/{cartId}:
+    get:
+      description: Get Order List
+
+      tags:
+        - "cart"
+      summary: "Get Order by Id"
+      parameters:
+        - name: cartId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        200:
+          description: Pending Applications object get successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CartListResponse'
+        404:
+          description: Data not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        500:
+          description: Internal Server Error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+components:
+
+  schemas:
+
+    Error:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int64
+        message:
+          type: string
+    ProductListResponse:
+      type: object
+      properties:
+        products:
+          type: array
+          items:
+            $ref: '#/components/schemas/Product'
+    Product:
+      type: object
+      properties:
+        productId:
+          type: string
+          description: The Identifier of the Customers Application
+        productName:
+          type: string
+          description: Product Category
+        productPrice:
+          type: number
+          format: double
+    CartRequest:
+      type: object
+      properties:
+        cartItem:
+          type: array
+          items:
+            $ref: '#/components/schemas/CartItem'
+        userName:
+          type: string
+    Order:
+      type: object
+      properties:
+        username:
+          type: string
+          description: username
+        cartId:
+          type: integer
+          format: int32
+          description: cartId
+    OrderListResponse:
+      type: object
+      properties:
+        orderResponse:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrderResponse'
+    OrderResponse:
+      type: object
+      properties:
+        username:
+          type: string
+          description: username
+        email:
+          type: string
+          description: username
+        orderItem:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrderItem'
+        totalPrice:
+          type: integer
+          format: int32
+          description: totalPrice
+    OrderItem:
+      type: object
+      properties:
+        productId:
+          type: string
+          description: The Identifier of the Customers Application
+        productName:
+          type: string
+          description: Product Category
+        productPrice:
+          type: number
+          format: double
+        quantity:
+          type: integer
+          format: int32
+          description: Product Category
+    CartListResponse:
+      type: object
+      properties:
+        cartResponse:
+          type: array
+          items:
+            $ref: '#/components/schemas/CartResponse'
+    CartResponse:
+      type: object
+      properties:
+        username:
+          type: string
+          description: username
+        email:
+          type: string
+          description: username
+        orderItem:
+          type: array
+          items:
+            $ref: '#/components/schemas/CartItem'
+        totalPrice:
+          type: integer
+          format: int32
+          description: totalPrice
+    CartItem:
+      type: object
+      properties:
+        productId:
+          type: string
+          description: The Identifier of the Customers Application
+        productName:
+          type: string
+          description: Product Category
+        productPrice:
+          type: number
+          format: double
+        quantity:
+          type: integer
+          format: int32
+          description: Product Category
